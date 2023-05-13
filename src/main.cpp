@@ -13,9 +13,9 @@ int main(int, char **)
     HaiSpec::BindLua(lua);
     HaiCandidates::BindLua(lua);
 
-    sol::table m1 = lua.script_file("./lua/test.lua");
+    sol::table m1 = lua.script_file("./Resources/lua/test.lua");
 
-    sol::table bodySpecTest = lua.script_file("./lua/BodySpec/Shuntsu.lua");
+    sol::table bodySpecTest = lua.script_file("./Resources/lua/BodySpec/shuntsu.lua");
     auto spec = BodySpec(bodySpecTest);
 
     auto hai = Hai(4, HaiSpec(HaiType::Wan, 5));

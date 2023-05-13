@@ -20,5 +20,5 @@ target_compile_features(moddable-mahjong PUBLIC cxx_std_20)
 
 add_custom_command(TARGET ${PROJECT_NAME}  POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
-                ${CMAKE_CURRENT_SOURCE_DIR}/lua
-                ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/lua)
+                ${CMAKE_CURRENT_SOURCE_DIR}/Resources
+                ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Resources)
