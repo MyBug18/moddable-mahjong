@@ -10,7 +10,12 @@ m.GetCandidates = function(hais)
 
     local l = #hais
 
-    if l == 0 or l >= 3 then
+    if (l >= 3) then
+        return candidates;
+    end
+
+    if l == 0 then
+        candidates.CompleteCount = 3
         return candidates
     end
 

@@ -10,7 +10,12 @@ m.GetCandidates = function(hais)
 
     local l = #hais
 
-    if l ~= 1 then
+    if (l >= 2) then
+        return candidates
+    end
+
+    if l == 0 then
+        candidates.CompleteCount = 2
         return candidates
     end
 
