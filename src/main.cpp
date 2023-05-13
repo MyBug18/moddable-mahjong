@@ -1,23 +1,13 @@
-#define SOL_ALL_SAFETIES_ON 1
-
 #include <iostream>
+#include "LuaDataHolder.h"
 #include "sol/sol.hpp"
 #include "Body.h"
 
 int main(int, char**)
 {
-    sol::state lua;
-    lua.open_libraries(sol::lib::base);
+    LuaDataHolder lua;
 
-    Hai::BindLua(lua);
-    HaiSpec::BindLua(lua);
-    HaiCandidates::BindLua(lua);
-
-    sol::table m1 = lua.script_file("./Resources/lua/test.lua");
-    Hai* asdf;
-
-    sol::table bodySpecTest = lua.script_file("./Resources/lua/BodySpec/shuntsu.lua");
-    auto spec = BodySpec(bodySpecTest);
+    auto spec = BodySpec(lua.GetLua("shuntsu"));
 
     auto hai = Hai(4, HaiSpec(HaiType::Wan, 5));
     auto vec = std::vector<Hai*>{ &hai };
