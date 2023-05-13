@@ -15,10 +15,10 @@ private:
     int completeCount;
 
 public:
-    static void BindLua(sol::state &);
+    static void BindLua(sol::state&);
 
     void PushHai(HaiSpec);
-    const std::vector<HaiSpec> &GetHais();
+    const std::vector<HaiSpec>& GetHais();
 
     int GetCompleteCount() const;
     void SetCompleteCount(int);

@@ -1,13 +1,13 @@
 #include "Body.h"
 
-BodySpec::BodySpec(const sol::table &table)
+BodySpec::BodySpec(const sol::table& table)
 {
     name = table["Name"];
     bodyType = table["BodyType"];
 
     sol::table propertiesRaw = table["Properties"];
 
-    for (auto &pair : propertiesRaw)
+    for (auto& pair : propertiesRaw)
     {
         properties.insert(pair.second.as<std::string>());
     }
@@ -16,11 +16,11 @@ BodySpec::BodySpec(const sol::table &table)
     getCandidates = table["GetCandidates"];
 }
 
-const HaiCandidates &BodySpec::GetCandidates(const std::vector<Hai *> &hais)
+const HaiCandidates& BodySpec::GetCandidates(const std::vector<Hai*>& hais)
 {
     return getCandidates(hais);
 }
 
-Body::Body(const BodySpec &spec) : bodySpec(spec)
+Body::Body(const BodySpec& spec) : bodySpec(spec)
 {
 }

@@ -17,22 +17,22 @@ private:
 
     bool shouldFuro;
 
-    std::function<const HaiCandidates &(const std::vector<Hai *> &)> getCandidates;
+    std::function<const HaiCandidates& (const std::vector<Hai*>&)> getCandidates;
 
 public:
-    BodySpec(const sol::table &);
+    BodySpec(const sol::table&);
 
-    const HaiCandidates &GetCandidates(const std::vector<Hai *> &);
+    const HaiCandidates& GetCandidates(const std::vector<Hai*>&);
 };
 
 class Body
 {
 private:
-    std::vector<Hai *> hais;
-    const BodySpec &bodySpec;
+    std::vector<Hai*> hais;
+    const BodySpec& bodySpec;
     bool isMenzen;
 
 public:
-    Body(const BodySpec &);
-    const BodySpec &GetBodySpec() const;
+    Body(const BodySpec&);
+    const BodySpec& GetBodySpec() const;
 };

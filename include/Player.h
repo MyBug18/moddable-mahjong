@@ -13,9 +13,8 @@ namespace sol
 class Player
 {
 private:
-    std::vector<Hai *> freeHais;
+    std::vector<Hai*> freeHais;
 
 public:
-    const static void
-    BindLua(sol::state &);
+    const static void BindLua(sol::state&);
 };

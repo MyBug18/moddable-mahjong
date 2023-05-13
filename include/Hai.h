@@ -20,7 +20,7 @@ private:
     int number;
 
 public:
-    static void BindLua(sol::state &);
+    static void BindLua(sol::state&);
 
     HaiSpec(HaiType, int);
 
@@ -38,7 +38,7 @@ private:
     std::unordered_set<std::string> properties;
 
 public:
-    static void BindLua(sol::state &);
+    static void BindLua(sol::state&);
 
     Hai(int, HaiSpec);
 
@@ -47,7 +47,7 @@ public:
 
     void Print() const;
 
-    const std::unordered_set<std::string> &GetProperties();
+    const std::unordered_set<std::string>& GetProperties();
 
-    void AddProperty(const std::string &);
+    void AddProperty(const std::string&);
 };

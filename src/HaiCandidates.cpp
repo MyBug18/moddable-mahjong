@@ -1,6 +1,6 @@
 #include "HaiCandidates.h"
 
-void HaiCandidates::BindLua(sol::state &lua)
+void HaiCandidates::BindLua(sol::state& lua)
 {
     auto haiType = lua.new_usertype<HaiCandidates>("HaiCandidates", sol::constructors<HaiCandidates()>());
 
@@ -13,7 +13,7 @@ void HaiCandidates::PushHai(HaiSpec spec)
     hais.push_back(spec);
 }
 
-const std::vector<HaiSpec> &HaiCandidates::GetHais()
+const std::vector<HaiSpec>& HaiCandidates::GetHais()
 {
     return hais;
 }

@@ -1,5 +1,5 @@
 {
-    "C_Cpp.vcFormat.space.pointerReferenceAlignment": "right",
+    "C_Cpp.vcFormat.space.pointerReferenceAlignment": "left",
     "files.associations": {
         "functional": "cpp",
         "array": "cpp",

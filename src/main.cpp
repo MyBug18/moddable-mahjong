@@ -4,7 +4,7 @@
 #include "sol/sol.hpp"
 #include "Body.h"
 
-int main(int, char **)
+int main(int, char**)
 {
     sol::state lua;
     lua.open_libraries(sol::lib::base);
@@ -14,16 +14,17 @@ int main(int, char **)
     HaiCandidates::BindLua(lua);
 
     sol::table m1 = lua.script_file("./Resources/lua/test.lua");
+    Hai* asdf;
 
     sol::table bodySpecTest = lua.script_file("./Resources/lua/BodySpec/shuntsu.lua");
     auto spec = BodySpec(bodySpecTest);
 
     auto hai = Hai(4, HaiSpec(HaiType::Wan, 5));
-    auto vec = std::vector<Hai *>{&hai};
+    auto vec = std::vector<Hai*>{ &hai };
 
     auto candidate = spec.GetCandidates(vec);
 
-    for (auto &v : candidate.GetHais())
+    for (auto& v : candidate.GetHais())
     {
         std::cout << v.GetNumber();
     }
