@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Hai.h"
 #include <vector>
 

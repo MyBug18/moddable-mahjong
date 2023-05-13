@@ -1,3 +1,5 @@
+#pragma once
+
 #include "HaiCandidates.h"
 #include <vector>
 #include <functional>
