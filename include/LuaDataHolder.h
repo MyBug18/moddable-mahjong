@@ -1,5 +1,7 @@
 #include "Body.h"
 
+typedef std::unordered_map<std::string, std::unordered_map<std::string, BodySpec>> BodySpecMap;
+
 class LuaDataHolder
 {
 private:
@@ -7,11 +9,15 @@ private:
     std::unordered_map<std::string, sol::table> container;
 
     void BindLua();
-    void LoadLuaFiles(std::string);
+    sol::table  LoadLuaFile(const std::string&);
+
+    BodySpecMap bodySpecs;
+    void LoadBodySpecs();
 
     LuaDataHolder& operator=(const LuaDataHolder&) = delete;
     LuaDataHolder& operator=(LuaDataHolder&&) = delete;
 public:
     LuaDataHolder();
-    const sol::table& GetLua(const std::string&);
+
+    const std::unordered_map<std::string, BodySpec>& GetBodySpecs(std::string);
 };

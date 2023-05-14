@@ -3,7 +3,6 @@ local m = {}
 m.Name = 'shuntsu'
 m.BodyType = 'triplet'
 m.Properties = { 'shuntsu' }
-m.ShouldFuro = false
 
 m.GetCandidates = function(hais)
     local candidates = HaiCandidates.new()

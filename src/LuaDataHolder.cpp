@@ -2,23 +2,31 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include <functional>
 
 namespace fs = std::filesystem;
 
-void LuaDataHolder::LoadLuaFiles(std::string directory)
+void DoFileRecursively(std::string directory, std::function<void(std::string)> cb)
 {
     for (const auto& entry : fs::directory_iterator(directory))
     {
         if (fs::is_directory(entry))
         {
             // Recursively load files from subdirectory
-            LuaDataHolder::LoadLuaFiles(entry.path());
+            DoFileRecursively(entry.path(), cb);
             return;
         }
 
-        const sol::table& table = lua.script_file(entry.path());
-        container[table["Name"]] = table;
+        cb(entry.path());
     }
+}
+
+sol::table LuaDataHolder::LoadLuaFile(const std::string& dir)
+{
+    const sol::table& table = lua.script_file(dir);
+
+    container[dir] = table;
+    return table;
 }
 
 void LuaDataHolder::BindLua()
@@ -32,10 +40,25 @@ LuaDataHolder::LuaDataHolder()
 {
     lua.open_libraries(sol::lib::base);
     BindLua();
-    LoadLuaFiles("./Resources/lua");
+
+    LoadBodySpecs();
 }
 
-const sol::table& LuaDataHolder::GetLua(const std::string& name)
+void LuaDataHolder::LoadBodySpecs()
 {
-    return container[name];
+    DoFileRecursively("./Resource/Lua/BodySpec", [this](std::string path)
+        {
+            const auto& table = LoadLuaFile(path);
+            const auto& bodySpec = BodySpec(table);
+
+            auto& name = bodySpec.GetName();
+            auto& bodyType = bodySpec.GetBodyType();
+
+            bodySpecs[bodyType].emplace(name, bodySpec);
+        });
+}
+
+const std::unordered_map<std::string, BodySpec>& LuaDataHolder::GetBodySpecs(std::string bodyType)
+{
+    return bodySpecs[bodyType];
 }

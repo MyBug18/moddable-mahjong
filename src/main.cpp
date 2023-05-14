@@ -7,7 +7,8 @@ int main(int, char**)
 {
     LuaDataHolder lua;
 
-    auto spec = BodySpec(lua.GetLua("shuntsu"));
+    auto specs = lua.GetBodySpecs("triplet");
+    auto spec = specs.at("shuntsu");
 
     auto hai = Hai(4, HaiSpec(HaiType::Wan, 5));
     auto vec = std::vector<Hai*>{ &hai };

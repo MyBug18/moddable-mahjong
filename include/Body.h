@@ -22,7 +22,10 @@ private:
 public:
     BodySpec(const sol::table&);
 
-    const HaiCandidates& GetCandidates(const std::vector<Hai*>&);
+    const std::string& GetName() const;
+    const std::string& GetBodyType() const;
+
+    const HaiCandidates& GetCandidates(const std::vector<Hai*>&) const;
 };
 
 class Body
