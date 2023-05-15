@@ -17,7 +17,7 @@ private:
 
     bool shouldFuro;
 
-    std::function<const HaiCandidates& (const std::vector<Hai*>&)> getCandidates;
+    std::function<const HaiCandidates& (Hai*, const std::vector<Hai*>&)> getCandidates;
 
 public:
     BodySpec(const sol::table&);
@@ -25,7 +25,28 @@ public:
     const std::string& GetName() const;
     const std::string& GetBodyType() const;
 
-    const HaiCandidates& GetCandidates(const std::vector<Hai*>&) const;
+    const HaiCandidates& GetCandidates(Hai*, const std::vector<Hai*>&) const;
+};
+
+class BodyCandidate
+{
+private:
+    std::string formName;
+    std::unordered_set<Hai*> componentshais;
+    std::unordered_set<Hai*> candidatesHais;
+    int completeCount;
+
+public:
+    static void BindLua(sol::state&);
+
+    void SetName(std::string);
+    const std::string& GetName() const;
+
+    void SetCompleteCount(int);
+    int GetCompleteCount() const;
+
+    void PushComponent(Hai*);
+    void PushCandidate(Hai*);
 };
 
 class Body

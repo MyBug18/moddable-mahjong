@@ -1,6 +1,6 @@
 #include "Body.h"
 
-typedef std::function<const HaiCandidates& (const std::vector<Hai*>&)> GetCandidateFunc;
+typedef std::function<const HaiCandidates& (Hai*, const std::vector<Hai*>&)> GetCandidateFunc;
 
 BodySpec::BodySpec(const sol::table& table)
 {
@@ -37,9 +37,39 @@ const std::string& BodySpec::GetBodyType() const
     return bodyType;
 }
 
-const HaiCandidates& BodySpec::GetCandidates(const std::vector<Hai*>& hais) const
+const HaiCandidates& BodySpec::GetCandidates(Hai* hai, const std::vector<Hai*>& hais) const
 {
-    return getCandidates(hais);
+    return getCandidates(hai, hais);
+}
+
+void BodyCandidate::BindLua(sol::state& lua)
+{
+    auto haiType = lua.new_usertype<BodyCandidate>("HaiCandidates", sol::constructors<BodyCandidate()>());
+
+    haiType["Name"] = sol::property(&BodyCandidate::GetName, &BodyCandidate::SetName);
+    haiType["CompleteCount"] = sol::property(&BodyCandidate::GetCompleteCount, &BodyCandidate::SetCompleteCount);
+    haiType["PushComponent"] = &BodyCandidate::PushComponent;
+    haiType["PushCandidate"] = &BodyCandidate::PushCandidate;
+}
+
+const std::string& BodyCandidate::GetName() const
+{
+    return formName;
+}
+
+void BodyCandidate::SetName(std::string name)
+{
+    formName = name;
+}
+
+int BodyCandidate::GetCompleteCount() const
+{
+    return completeCount;
+}
+
+void BodyCandidate::SetCompleteCount(int n)
+{
+    completeCount = n;
 }
 
 Body::Body(const BodySpec& spec) : bodySpec(spec)
