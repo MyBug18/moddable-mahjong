@@ -1,7 +1,12 @@
 #pragma once
 
-#include "HaiCandidates.h"
+#include "Body.h"
 #include <unordered_map>
+
+class ShangtenInfo
+{
+
+};
 
 class TenpaiSpec
 {
@@ -10,5 +15,7 @@ private:
     std::unordered_map<std::string, int> components;
 
 public:
-    const HaiCandidates& GetShangten(const std::vector<Hai*>&, std::unordered_map<std::string, int>*);
+    TenpaiSpec(const sol::table&);
+
+    ShangtenInfo GetShangten(const std::vector<Hai*>&);
 };

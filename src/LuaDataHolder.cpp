@@ -32,8 +32,8 @@ sol::table LuaDataHolder::LoadLuaFile(const std::string& dir)
 void LuaDataHolder::BindLua()
 {
     HaiSpec::BindLua(lua);
+    BodyCandidate::BindLua(lua);
     Hai::BindLua(lua);
-    HaiCandidates::BindLua(lua);
 }
 
 LuaDataHolder::LuaDataHolder()
@@ -54,11 +54,11 @@ void LuaDataHolder::LoadBodySpecs()
             auto& name = bodySpec.GetName();
             auto& bodyType = bodySpec.GetBodyType();
 
-            bodySpecs[bodyType].emplace(name, bodySpec);
+            bodySpecs[bodyType].emplace_back(bodySpec);
         });
 }
 
-const std::unordered_map<std::string, BodySpec>& LuaDataHolder::GetBodySpecs(std::string bodyType)
+const std::vector<BodySpec>& LuaDataHolder::GetBodySpecs(std::string bodyType)
 {
     return bodySpecs[bodyType];
 }

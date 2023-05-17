@@ -4,6 +4,7 @@ m.Name = 'toitsu'
 m.BodyType = 'head'
 m.Properties = { 'toitsu' }
 
+m.CompleteCount = 2
 m.GetCandidates = function(hais)
     local candidates = HaiCandidates.new()
 

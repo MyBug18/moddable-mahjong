@@ -4,6 +4,7 @@ m.Name = 'shuntsu'
 m.BodyType = 'triplet'
 m.Properties = { 'shuntsu' }
 
+m.CompleteCount = 3
 m.GetCandidates = function(hais)
     local candidates = HaiCandidates.new()
 
@@ -34,14 +35,6 @@ m.GetCandidates = function(hais)
 
         if number1 - 1 >= 1 then
             candidates:PushHai(HaiSpec.new(haiType1, number1 - 1))
-        end
-
-        if number1 + 1 <= 9 then
-            candidates:PushHai(HaiSpec.new(haiType1, number1 + 1))
-        end
-
-        if number1 + 2 <= 9 then
-            candidates:PushHai(HaiSpec.new(haiType1, number1 + 2))
         end
 
         candidates.CompleteCount = 2

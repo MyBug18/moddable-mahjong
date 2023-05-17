@@ -1,11 +1,15 @@
 #include "Body.h"
+#include <algorithm>
 
-typedef std::function<const HaiCandidates& (Hai*, const std::vector<Hai*>&)> GetCandidateFunc;
-
-BodySpec::BodySpec(const sol::table& table)
+BodySpec::BodySpec(const sol::table& table) : name{ table["Name"] }
 {
-    name = table["Name"];
     bodyType = table["BodyType"];
+
+    auto val = table.get<sol::optional<sol::object>>("CompleteCount");
+    if (val)
+    {
+        completeCount = val.value().as<int>();
+    }
 
     sol::table propertiesRaw = table["Properties"];
 
@@ -14,11 +18,10 @@ BodySpec::BodySpec(const sol::table& table)
         properties.insert(pair.second.as<std::string>());
     }
 
-    auto val = table.get<sol::optional<sol::object>>("GetCandidates");
-
+    val = table.get<sol::optional<sol::object>>("GetCandidates");
     if (val)
     {
-        getCandidates = val.value().as<GetCandidateFunc>();
+        getCandidates = val.value().as<std::function<void(Hai*, BodyCandidate&)>>();
         shouldFuro = false;
     }
     else
@@ -37,9 +40,17 @@ const std::string& BodySpec::GetBodyType() const
     return bodyType;
 }
 
-const HaiCandidates& BodySpec::GetCandidates(Hai* hai, const std::vector<Hai*>& hais) const
+void BodySpec::GetCandidates(Hai* hai, BodyCandidate& hais) const
 {
     return getCandidates(hai, hais);
+}
+
+std::vector<Hai*> ReverseCopy(std::vector<Hai*> input)
+{
+    auto output = input;
+    std::reverse(output.begin(), output.end());
+
+    return output;
 }
 
 void BodyCandidate::BindLua(sol::state& lua)
@@ -47,8 +58,6 @@ void BodyCandidate::BindLua(sol::state& lua)
     auto haiType = lua.new_usertype<BodyCandidate>("HaiCandidates", sol::constructors<BodyCandidate()>());
 
     haiType["Name"] = sol::property(&BodyCandidate::GetName, &BodyCandidate::SetName);
-    haiType["CompleteCount"] = sol::property(&BodyCandidate::GetCompleteCount, &BodyCandidate::SetCompleteCount);
-    haiType["PushComponent"] = &BodyCandidate::PushComponent;
     haiType["PushCandidate"] = &BodyCandidate::PushCandidate;
 }
 
@@ -62,15 +71,11 @@ void BodyCandidate::SetName(std::string name)
     formName = name;
 }
 
-int BodyCandidate::GetCompleteCount() const
+void BodyCandidate::PushCandidate(Hai* h)
 {
-    return completeCount;
+    candidatesHais.insert(h);
 }
 
-void BodyCandidate::SetCompleteCount(int n)
-{
-    completeCount = n;
-}
 
 Body::Body(const BodySpec& spec) : bodySpec(spec)
 {
