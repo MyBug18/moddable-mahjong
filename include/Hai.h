@@ -1,31 +1,23 @@
 #pragma once
 
-#include <unordered_set>
-#include <string>
 #include "sol/sol.hpp"
-
-enum HaiType
-{
-    Wan,
-    Sou,
-    Pin,
-    Kaze,
-    Sangen,
-};
+#include <string>
 
 class HaiSpec
 {
 private:
-    HaiType haiType;
+    int haiType;
     int number;
 
 public:
     static void BindLua(sol::state&);
 
-    HaiSpec(HaiType, int);
+    bool operator==(const HaiSpec&) const;
+
+    HaiSpec(int, int);
 
     int GetNumber() const;
-    HaiType GetHaiType() const;
+    int GetHaiType() const;
 };
 
 class Hai
@@ -35,7 +27,8 @@ private:
 
     HaiSpec haiSpec;
 
-    std::unordered_set<std::string> properties;
+    // bitmask
+    int properties;
 
 public:
     static void BindLua(sol::state&);
@@ -47,7 +40,7 @@ public:
 
     void Print() const;
 
-    const std::unordered_set<std::string>& GetProperties();
+    void AddProperty(int);
 
-    void AddProperty(const std::string&);
+    bool IsIdentical(const Hai&) const;
 };

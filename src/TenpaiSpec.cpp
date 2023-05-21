@@ -13,7 +13,7 @@ TenpaiSpec::TenpaiSpec(const sol::table& table) : name{ table["Name"] }
 
 ShangtenInfo TenpaiSpec::GetShangten(const std::vector<Hai*>& hais)
 {
-    LuaDataHolder lua;
+    auto& lua = LuaDataHolder::GetInstance();
     ShangtenInfo result;
 
     for (auto& bodyType : components)
@@ -28,4 +28,12 @@ ShangtenInfo TenpaiSpec::GetShangten(const std::vector<Hai*>& hais)
     }
 
     return result;
+}
+
+void GetAllCandidates(const BodySpec& bodySpec, const std::vector<Hai*>& hais, std::vector<BodyCandidate>& output)
+{
+    for (auto i = 0; i < hais.size(); i++)
+    {
+        auto curHai = hais[i];
+    }
 }

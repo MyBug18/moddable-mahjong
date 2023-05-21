@@ -1,6 +1,6 @@
 local m = {}
 
-local spec = HaiSpec.new(HaiType.Wan, 1)
+local spec = HaiSpec.new(1, 1)
 
 m.Name = 'test'
 m.h1 = Hai.new(1, spec)

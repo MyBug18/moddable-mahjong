@@ -1,20 +1,18 @@
 #include "Hai.h"
 #include <iostream>
 
-HaiSpec::HaiSpec(HaiType haiType, int number) : haiType(haiType), number(number)
+HaiSpec::HaiSpec(int haiType, int number) : haiType(haiType), number(number)
 {
+}
+
+bool HaiSpec::operator==(const HaiSpec& haiSpec) const
+{
+    return haiSpec.haiType == haiType && haiSpec.number == number;
 }
 
 void HaiSpec::BindLua(sol::state &lua)
 {
-    lua["HaiType"] = lua.create_table_with(
-        "Wan", HaiType::Wan,
-        "Sou", HaiType::Sou,
-        "Pin", HaiType::Pin,
-        "Kaze", HaiType::Kaze,
-        "Sangen", HaiType::Sangen);
-
-    auto haiType = lua.new_usertype<HaiSpec>("HaiSpec", sol::constructors<HaiSpec(HaiType, int)>());
+    auto haiType = lua.new_usertype<HaiSpec>("HaiSpec", sol::constructors<HaiSpec(int, int)>());
 
     haiType["HaiType"] = sol::property(&HaiSpec::GetHaiType);
     haiType["Number"] = sol::property(&HaiSpec::GetNumber);
@@ -24,7 +22,7 @@ int HaiSpec::GetNumber() const
     return number;
 }
 
-HaiType HaiSpec::GetHaiType() const
+int HaiSpec::GetHaiType() const
 {
     return haiType;
 }
@@ -57,12 +55,14 @@ void Hai::Print() const
     std::cout << id << " " << std::endl;
 }
 
-const std::unordered_set<std::string> &Hai::GetProperties()
+void Hai::AddProperty(int p)
 {
-    return properties;
+    if (properties & p > 0) return;
+
+    properties |= p;
 }
 
-void Hai::AddProperty(const std::string &p)
+bool Hai::IsIdentical(const Hai& hai) const
 {
-    properties.insert(p);
+    return haiSpec == hai.haiSpec && properties == hai.properties;
 }

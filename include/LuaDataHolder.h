@@ -17,5 +17,7 @@ private:
 public:
     LuaDataHolder();
 
-    const std::vector<BodySpec>& GetBodySpecs(std::string);
+    static const LuaDataHolder& GetInstance();
+
+    const std::vector<BodySpec>& GetBodySpecs(std::string) const;
 };

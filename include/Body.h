@@ -10,13 +10,15 @@ class BodyCandidate
 {
 private:
     std::string formName;
-    std::unordered_set<Hai*> componentshais;
+    std::unordered_set<Hai*> componentsHais;
     std::unordered_set<Hai*> candidatesHais;
 
 public:
     static void BindLua(sol::state&);
 
     void SetName(std::string);
+
+    const std::unordered_set<Hai*>& GetComponentHais() const;
     const std::string& GetName() const;
 
     void PushCandidate(Hai*);
@@ -35,7 +37,7 @@ private:
 
     bool shouldFuro;
 
-    std::function<void(Hai*, BodyCandidate&)> getCandidates;
+    std::function<bool(BodyCandidate&)> getCandidates;
 
     int completeCount;
 
@@ -45,7 +47,7 @@ public:
     const std::string& GetName() const;
     const std::string& GetBodyType() const;
 
-    void GetCandidates(Hai*, BodyCandidate&) const;
+    bool GetCandidates(BodyCandidate&) const;
 };
 
 class Body

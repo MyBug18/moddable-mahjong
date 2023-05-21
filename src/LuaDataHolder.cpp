@@ -1,8 +1,11 @@
 #include "LuaDataHolder.h"
+#include <memory>
 #include <iostream>
 #include <fstream>
 #include <filesystem>
 #include <functional>
+
+std::unique_ptr<LuaDataHolder> instance;
 
 namespace fs = std::filesystem;
 
@@ -44,6 +47,16 @@ LuaDataHolder::LuaDataHolder()
     LoadBodySpecs();
 }
 
+const LuaDataHolder& LuaDataHolder::GetInstance()
+{
+    if (instance.get() == nullptr)
+    {
+        instance = std::make_unique<LuaDataHolder>();
+    }
+
+    return *(instance.get());
+}
+
 void LuaDataHolder::LoadBodySpecs()
 {
     DoFileRecursively("./Resource/Lua/BodySpec", [this](std::string path)
@@ -58,7 +71,7 @@ void LuaDataHolder::LoadBodySpecs()
         });
 }
 
-const std::vector<BodySpec>& LuaDataHolder::GetBodySpecs(std::string bodyType)
+const std::vector<BodySpec>& LuaDataHolder::GetBodySpecs(std::string bodyType) const
 {
-    return bodySpecs[bodyType];
+    return bodySpecs.at(bodyType);
 }

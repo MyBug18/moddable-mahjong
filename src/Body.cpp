@@ -21,7 +21,7 @@ BodySpec::BodySpec(const sol::table& table) : name{ table["Name"] }
     val = table.get<sol::optional<sol::object>>("GetCandidates");
     if (val)
     {
-        getCandidates = val.value().as<std::function<void(Hai*, BodyCandidate&)>>();
+        getCandidates = val.value().as<std::function<bool(BodyCandidate&)>>();
         shouldFuro = false;
     }
     else
@@ -40,9 +40,9 @@ const std::string& BodySpec::GetBodyType() const
     return bodyType;
 }
 
-void BodySpec::GetCandidates(Hai* hai, BodyCandidate& hais) const
+bool BodySpec::GetCandidates(BodyCandidate& hais) const
 {
-    return getCandidates(hai, hais);
+    return getCandidates(hais);
 }
 
 std::vector<Hai*> ReverseCopy(std::vector<Hai*> input)
@@ -55,10 +55,16 @@ std::vector<Hai*> ReverseCopy(std::vector<Hai*> input)
 
 void BodyCandidate::BindLua(sol::state& lua)
 {
-    auto haiType = lua.new_usertype<BodyCandidate>("HaiCandidates", sol::constructors<BodyCandidate()>());
+    auto haiType = lua.new_usertype<BodyCandidate>("BodyCandidate", sol::constructors<BodyCandidate()>());
 
     haiType["Name"] = sol::property(&BodyCandidate::GetName, &BodyCandidate::SetName);
+    haiType["ComponentHais"] = sol::property(&BodyCandidate::GetComponentHais);
     haiType["PushCandidate"] = &BodyCandidate::PushCandidate;
+}
+
+const std::unordered_set<Hai*>& BodyCandidate::GetComponentHais() const
+{
+    return componentsHais;
 }
 
 const std::string& BodyCandidate::GetName() const
