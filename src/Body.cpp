@@ -55,14 +55,14 @@ std::vector<Hai*> ReverseCopy(std::vector<Hai*> input)
 
 void BodyCandidate::BindLua(sol::state& lua)
 {
-    auto haiType = lua.new_usertype<BodyCandidate>("BodyCandidate", sol::constructors<BodyCandidate()>());
+    auto haiType = lua.new_usertype<BodyCandidate>("BodyCandidate");
 
     haiType["Name"] = sol::property(&BodyCandidate::GetName, &BodyCandidate::SetName);
     haiType["ComponentHais"] = sol::property(&BodyCandidate::GetComponentHais);
     haiType["PushCandidate"] = &BodyCandidate::PushCandidate;
 }
 
-const std::unordered_set<Hai*>& BodyCandidate::GetComponentHais() const
+const std::unordered_set<const Hai*>& BodyCandidate::GetComponentHais() const
 {
     return componentsHais;
 }
@@ -77,7 +77,7 @@ void BodyCandidate::SetName(std::string name)
     formName = name;
 }
 
-void BodyCandidate::PushCandidate(Hai* h)
+void BodyCandidate::PushCandidate(const Hai* h)
 {
     candidatesHais.insert(h);
 }

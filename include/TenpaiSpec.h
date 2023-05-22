@@ -2,10 +2,25 @@
 
 #include "Body.h"
 #include <unordered_map>
+#include <memory>
 
 class ShangtenInfo
 {
+private:
+    std::vector<const BodyCandidate*> bodyCandidates;
 
+    ShangtenInfo& operator=(const ShangtenInfo&) = delete;
+    ShangtenInfo& operator=(ShangtenInfo&&) = delete;
+
+public:
+    ~ShangtenInfo();
+
+    BodyCandidate* NewBodyCandidate();
+
+    const std::vector<const BodyCandidate*>& GetBodyCandidates() const
+    {
+        return bodyCandidates;
+    }
 };
 
 class TenpaiSpec
@@ -17,5 +32,5 @@ private:
 public:
     TenpaiSpec(const sol::table&);
 
-    ShangtenInfo GetShangten(const std::vector<Hai*>&);
+    std::unique_ptr<ShangtenInfo> GetShangten(const std::vector<const Hai*>&);
 };

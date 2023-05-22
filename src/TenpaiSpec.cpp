@@ -1,6 +1,23 @@
 #include "TenpaiSpec.h"
 #include "LuaDataHolder.h"
 
+BodyCandidate* ShangtenInfo::NewBodyCandidate()
+{
+    auto result = new BodyCandidate();
+
+    bodyCandidates.push_back(result);
+
+    return result;
+}
+
+ShangtenInfo::~ShangtenInfo()
+{
+    for (auto& ptr : bodyCandidates)
+    {
+        delete ptr;
+    }
+}
+
 TenpaiSpec::TenpaiSpec(const sol::table& table) : name{ table["Name"] }
 {
     sol::table componentsRaw = table["Properties"];
@@ -11,10 +28,25 @@ TenpaiSpec::TenpaiSpec(const sol::table& table) : name{ table["Name"] }
     }
 }
 
-ShangtenInfo TenpaiSpec::GetShangten(const std::vector<Hai*>& hais)
+void ExtractFromHai(const BodySpec& bodySpec, const std::vector<const Hai*>& hais, ShangtenInfo* output, int index)
+{
+    auto bodyCandidate = output->NewBodyCandidate();
+}
+
+void GetAllCandidates(const BodySpec& bodySpec, const std::vector<const Hai*>& hais, ShangtenInfo* output)
+{
+    for (auto i = 0; i < hais.size(); i++)
+    {
+        auto curHai = hais[i];
+
+
+    }
+}
+
+std::unique_ptr<ShangtenInfo> TenpaiSpec::GetShangten(const std::vector<const Hai*>& hais)
 {
     auto& lua = LuaDataHolder::GetInstance();
-    ShangtenInfo result;
+    auto result = std::make_unique<ShangtenInfo>();
 
     for (auto& bodyType : components)
     {
@@ -23,17 +55,10 @@ ShangtenInfo TenpaiSpec::GetShangten(const std::vector<Hai*>& hais)
         for (auto& bodySpec : lua.GetBodySpecs(bodyType.first))
         {
             // bodyspecs: shuntsu, toitsu
+            GetAllCandidates(bodySpec, hais, result.get());
 
         }
     }
 
     return result;
-}
-
-void GetAllCandidates(const BodySpec& bodySpec, const std::vector<Hai*>& hais, std::vector<BodyCandidate>& output)
-{
-    for (auto i = 0; i < hais.size(); i++)
-    {
-        auto curHai = hais[i];
-    }
 }

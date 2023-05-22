@@ -10,18 +10,18 @@ class BodyCandidate
 {
 private:
     std::string formName;
-    std::unordered_set<Hai*> componentsHais;
-    std::unordered_set<Hai*> candidatesHais;
+    std::unordered_set<const Hai*> componentsHais;
+    std::unordered_set<const Hai*> candidatesHais;
+
+    void SetName(std::string);
 
 public:
     static void BindLua(sol::state&);
 
-    void SetName(std::string);
+    void PushCandidate(const Hai*);
 
-    const std::unordered_set<Hai*>& GetComponentHais() const;
+    const std::unordered_set<const Hai*>& GetComponentHais() const;
     const std::string& GetName() const;
-
-    void PushCandidate(Hai*);
 };
 
 class BodySpec

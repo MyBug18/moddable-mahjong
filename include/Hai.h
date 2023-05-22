@@ -1,7 +1,6 @@
 #pragma once
 
 #include "sol/sol.hpp"
-#include <string>
 
 class HaiSpec
 {
