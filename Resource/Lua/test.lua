@@ -1,10 +1,9 @@
 local m = {}
 
-local spec = HaiSpec.new(1, 1)
+a = 3
 
-m.Name = 'test'
-m.h1 = Hai.new(1, spec)
-m.h2 = 1;
-m.h1:AddProperty('asf')
+m.spec1 = HaiSpec.new(1, 3)
+m.spec2 = HaiSpec.new(1, 2)
+m.res = a
 
 return m

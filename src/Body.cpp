@@ -1,16 +1,8 @@
 #include "Body.h"
 #include <algorithm>
 
-BodySpec::BodySpec(const sol::table& table) : name{ table["Name"] }
+BodySpec::BodySpec(const sol::table& table) : name{ table["Name"] }, bodyType{ table["BodyType"] }
 {
-    bodyType = table["BodyType"];
-
-    auto val = table.get<sol::optional<sol::object>>("CompleteCount");
-    if (val)
-    {
-        completeCount = val.value().as<int>();
-    }
-
     sol::table propertiesRaw = table["Properties"];
 
     for (auto& pair : propertiesRaw)
@@ -18,10 +10,16 @@ BodySpec::BodySpec(const sol::table& table) : name{ table["Name"] }
         properties.insert(pair.second.as<std::string>());
     }
 
+    auto val = table.get<sol::optional<sol::object>>("CompleteCount");
+    if (val)
+    {
+        completeCount = val.value().as<int>();
+    }
+
     val = table.get<sol::optional<sol::object>>("GetCandidates");
     if (val)
     {
-        getCandidates = val.value().as<std::function<bool(BodyCandidate&)>>();
+        getCandidates = val.value().as<std::function<bool(BodyCandidate*)>>();
         shouldFuro = false;
     }
     else
@@ -40,7 +38,7 @@ const std::string& BodySpec::GetBodyType() const
     return bodyType;
 }
 
-bool BodySpec::GetCandidates(BodyCandidate& hais) const
+bool BodySpec::GetCandidates(BodyCandidate* hais) const
 {
     return getCandidates(hais);
 }
@@ -62,11 +60,6 @@ void BodyCandidate::BindLua(sol::state& lua)
     haiType["PushCandidate"] = &BodyCandidate::PushCandidate;
 }
 
-const std::unordered_set<const Hai*>& BodyCandidate::GetComponentHais() const
-{
-    return componentsHais;
-}
-
 const std::string& BodyCandidate::GetName() const
 {
     return formName;
@@ -79,7 +72,7 @@ void BodyCandidate::SetName(std::string name)
 
 void BodyCandidate::PushCandidate(const Hai* h)
 {
-    candidatesHais.insert(h);
+    candidateHais.insert(h);
 }
 
 

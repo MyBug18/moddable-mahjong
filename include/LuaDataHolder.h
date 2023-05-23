@@ -13,7 +13,6 @@ private:
     void LoadBodySpecs();
 
     LuaDataHolder& operator=(const LuaDataHolder&) = delete;
-    LuaDataHolder& operator=(LuaDataHolder&&) = delete;
 public:
     LuaDataHolder();
 

@@ -4,18 +4,20 @@
 #include <unordered_map>
 #include <memory>
 
-class ShangtenInfo
+class ShangtenInfo final
 {
 private:
     std::vector<const BodyCandidate*> bodyCandidates;
 
+    ShangtenInfo(const ShangtenInfo&) = delete;
     ShangtenInfo& operator=(const ShangtenInfo&) = delete;
-    ShangtenInfo& operator=(ShangtenInfo&&) = delete;
 
 public:
     ~ShangtenInfo();
+    ShangtenInfo() = default;
 
     BodyCandidate* NewBodyCandidate();
+    BodyCandidate* NewBodyCandidate(const BodyCandidate*);
 
     const std::vector<const BodyCandidate*>& GetBodyCandidates() const
     {
@@ -23,11 +25,14 @@ public:
     }
 };
 
-class TenpaiSpec
+class TenpaiSpec final
 {
 private:
     std::string name;
     std::unordered_map<std::string, int> components;
+
+    TenpaiSpec(const TenpaiSpec&) = delete;
+    TenpaiSpec& operator=(const TenpaiSpec&) = delete;
 
 public:
     TenpaiSpec(const sol::table&);

@@ -10,7 +10,12 @@ m.GetCandidates = function(bodyCandidate)
 
     local l = #hais
 
-    if (l >= 3 or l == 0) then
+    if (l == 0) then
+        return false
+    end
+
+    if (l >= 3) then
+        candidates:SetName('shuntsu_complete')
         return false
     end
 

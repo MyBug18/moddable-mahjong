@@ -11,12 +11,45 @@ private:
 public:
     static void BindLua(sol::state&);
 
-    bool operator==(const HaiSpec&) const;
-
     HaiSpec(int, int);
 
     int GetNumber() const;
     int GetHaiType() const;
+
+    bool operator<(const HaiSpec& other) const
+    {
+        if (haiType == other.haiType)
+        {
+            return number < other.number;
+        }
+
+        return haiType < other.haiType;
+    }
+
+    bool operator==(const HaiSpec& other) const
+    {
+        return number == other.number && haiType == other.haiType;
+    }
+
+    bool operator!=(const HaiSpec& other) const
+    {
+        return !(*this == other);
+    }
+
+    bool operator<=(const HaiSpec& other) const
+    {
+        return (*this < other) || (*this == other);
+    }
+
+    bool operator>(const HaiSpec& other) const
+    {
+        return !(*this <= other);
+    }
+
+    bool operator>=(const HaiSpec& other) const
+    {
+        return !(*this < other);
+    }
 };
 
 class Hai

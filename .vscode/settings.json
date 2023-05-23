@@ -57,7 +57,8 @@
         "codecvt": "cpp",
         "ratio": "cpp",
         "fstream": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "set": "cpp"
     },
     "C_Cpp.formatting": "vcFormat"
 }

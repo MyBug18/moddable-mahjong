@@ -5,18 +5,18 @@ m.BodyType = 'head'
 m.Properties = { 'toitsu' }
 
 m.CompleteCount = 2
-m.GetCandidates = function(hais)
-    local candidates = HaiCandidates.new()
+m.GetCandidates = function(bodyCandidate)
+    local hais = bodyCandidate.ComponentHais;
 
     local l = #hais
 
     if (l >= 2) then
-        return candidates
+        bodyCandidate:SetName('toitsu_complete')
+        return false
     end
 
     if l == 0 then
-        candidates.CompleteCount = 2
-        return candidates
+        return false
     end
 
     local hai = hais[1]
@@ -24,10 +24,10 @@ m.GetCandidates = function(hais)
     local number = haiSpec.Number
     local haiType = haiSpec.HaiType
 
-    candidates:PushHai(HaiSpec.new(haiType, number))
-    candidates.CompleteCount = 1
+    bodyCandidate:PushHai(HaiSpec.new(haiType, number))
+    bodyCandidate:SetName('tanki')
 
-    return candidates
+    return true
 end
 
 return m

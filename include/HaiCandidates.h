@@ -4,22 +4,37 @@
 #include <string>
 #include <vector>
 
-namespace sol
-{
-    class state;
-}
-
 class HaiCandidates
 {
 private:
-    std::vector<HaiSpec> hais;
+    const std::vector<const Hai*>& components;
+
+    std::vector<HaiSpec> candidates;
     std::string formName;
 
 public:
-    static void BindLua(sol::state&);
+    static void BindLua(sol::state&)
+    {
+        auto haiType = lua.new_usertype<HaiCandidates>("HaiCandidates", sol::no_constructor);
 
-    void PushHai(HaiSpec);
-    const std::vector<HaiSpec>& GetHais();
+        haiType["Name"] = sol::property(&HaiCandidates::GetName, &HaiCandidates::SetName);
+        haiType["PushHai"] = &HaiCandidates::PushHai;
+    }
+
+    HaiCandidates(const std::vector<const Hai*>& components) : components{ components }
+    {
+
+    }
+
+    void PushHai(HaiSpec spec)
+    {
+        candidates.push_back(spec);
+    }
+
+    const std::vector<HaiSpec>& GetSpecs() const
+    {
+        return candidates;
+    }
 
     void SetName(std::string formName)
     {

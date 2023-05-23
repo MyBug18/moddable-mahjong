@@ -2,11 +2,26 @@
 #include "LuaDataHolder.h"
 #include "Body.h"
 
+std::vector<int> n()
+{
+    std::vector<int> a;
+    a.push_back(2);
+    a.push_back(3);
+
+    return a;
+}
+
 int main(int, char**)
 {
-    auto specs = LuaDataHolder::GetInstance().GetBodySpecs("triplet");
-    auto spec = specs[0];
+    sol::state lua;
+    lua.open_libraries(sol::lib::base);
+    HaiSpec::BindLua(lua);
 
-    auto hai = Hai(4, HaiSpec(1, 5));
-    auto vec = std::vector<Hai*>{ &hai };
+    int* a = new int(5);
+    lua.set("a", a);
+    sol::table res = lua.script_file("./Resource/Lua/test.lua");
+
+    int d = res["res"];
+
+    std::cout << d << " " << *a << std::endl;
 }

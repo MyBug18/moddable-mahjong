@@ -5,12 +5,7 @@ HaiSpec::HaiSpec(int haiType, int number) : haiType(haiType), number(number)
 {
 }
 
-bool HaiSpec::operator==(const HaiSpec& haiSpec) const
-{
-    return haiSpec.haiType == haiType && haiSpec.number == number;
-}
-
-void HaiSpec::BindLua(sol::state &lua)
+void HaiSpec::BindLua(sol::state& lua)
 {
     auto haiType = lua.new_usertype<HaiSpec>("HaiSpec", sol::constructors<HaiSpec(int, int)>());
 
@@ -27,7 +22,7 @@ int HaiSpec::GetHaiType() const
     return haiType;
 }
 
-void Hai::BindLua(sol::state &lua)
+void Hai::BindLua(sol::state& lua)
 {
     auto haiType = lua.new_usertype<Hai>("Hai", sol::constructors<Hai(int, HaiSpec)>());
 
@@ -36,7 +31,7 @@ void Hai::BindLua(sol::state &lua)
     haiType["AddProperty"] = &Hai::AddProperty;
 }
 
-Hai::Hai(int id, HaiSpec haiSpec) : id{id}, haiSpec{haiSpec}
+Hai::Hai(int id, HaiSpec haiSpec) : id{ id }, haiSpec{ haiSpec }
 {
 }
 
