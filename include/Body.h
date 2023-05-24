@@ -1,21 +1,23 @@
 #pragma once
 
-#include "Hai.h"
 #include <string>
 #include <unordered_set>
-#include <vector>
 #include <functional>
+#include "CandidateExtractor.h"
 
 class BodyCandidate final
 {
 private:
     std::string formName;
-    std::unordered_set<const Hai*> componentHais;
+    std::vector<const Hai*> componentHais;
     std::unordered_set<const Hai*> candidateHais;
 
     int count;
 
-    void SetName(std::string);
+    ROVector<const Hai*> GetComponentHaisLua()
+    {
+        return ROVector<const Hai*>(componentHais);
+    }
 
 public:
     BodyCandidate() = default;
@@ -28,9 +30,12 @@ public:
 
     static void BindLua(sol::state&);
 
-    void PushCandidate(const Hai*);
+    void PushCandidate(const Hai* h)
+    {
+        candidateHais.insert(h);
+    }
 
-    const std::unordered_set<const Hai*>& GetComponentHais() const
+    const std::vector<const Hai*>& GetComponentHais() const
     {
         return componentHais;
     }
@@ -40,7 +45,15 @@ public:
         return candidateHais;
     }
 
-    const std::string& GetName() const;
+    const std::string& GetName() const
+    {
+        return formName;
+    }
+
+    void SetName(std::string name)
+    {
+        formName = name;
+    }
 };
 
 class BodySpec final
@@ -56,17 +69,27 @@ private:
 
     bool shouldFuro;
 
-    std::function<bool(BodyCandidate*)> getCandidates;
+    std::function<bool(CandidateExtractor&)> getCandidates;
 
     int completeCount;
 
 public:
     BodySpec(const sol::table&);
 
-    const std::string& GetName() const;
-    const std::string& GetBodyType() const;
+    const std::string& GetName() const
+    {
+        return name;
+    }
 
-    bool GetCandidates(BodyCandidate*) const;
+    const std::string& GetBodyType() const
+    {
+        return bodyType;
+    }
+
+    bool GetCandidates(CandidateExtractor& extractor) const
+    {
+        return getCandidates(extractor);
+    }
 };
 
 class Body
@@ -77,6 +100,10 @@ private:
     bool isMenzen;
 
 public:
-    Body(const BodySpec&);
+    Body(const BodySpec& spec) : bodySpec(spec)
+    {
+
+    }
+
     const BodySpec& GetBodySpec() const;
 };

@@ -3,6 +3,7 @@
 #include "Body.h"
 #include <unordered_map>
 #include <memory>
+#include <tuple>
 
 class ShangtenInfo final
 {

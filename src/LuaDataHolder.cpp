@@ -5,6 +5,8 @@
 #include <filesystem>
 #include <functional>
 
+#include "ROContainer/ROVector.h"
+
 std::unique_ptr<LuaDataHolder> instance;
 
 namespace fs = std::filesystem;
@@ -24,6 +26,11 @@ void DoFileRecursively(std::string directory, std::function<void(std::string)> c
     }
 }
 
+void BindROContainers(sol::state& lua)
+{
+    ROVector<const Hai*>::BindLua(lua);
+}
+
 sol::table LuaDataHolder::LoadLuaFile(const std::string& dir)
 {
     const sol::table& table = lua.script_file(dir);
@@ -37,6 +44,8 @@ void LuaDataHolder::BindLua()
     HaiSpec::BindLua(lua);
     BodyCandidate::BindLua(lua);
     Hai::BindLua(lua);
+
+    BindROContainers(lua);
 }
 
 LuaDataHolder::LuaDataHolder()

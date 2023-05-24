@@ -1,5 +1,6 @@
 #include "TenpaiSpec.h"
 #include "LuaDataHolder.h"
+#include "CandidateExtractor.h"
 #include <queue>
 #include <tuple>
 
@@ -59,9 +60,33 @@ void GetAllCandidates(const BodySpec& bodySpec, const std::vector<const Hai*>& h
         auto curBodyCandidate = std::get<0>(cur);
         auto index = std::get<1>(cur);
 
-        auto canProceed = bodySpec.GetCandidates(curBodyCandidate);
+        CandidateExtractor extractor(curBodyCandidate->GetComponentHais());
 
+        auto canProceed = bodySpec.GetCandidates(extractor);
         if (!canProceed) continue;
+
+        extractor.Sort();
+
+        for (auto& candidateSpec : extractor.GetSpecs())
+        {
+            HaiSpec prevHaiSpec(-1, -1);
+
+            for (int i = index + 1; i < hais.size(); i++)
+            {
+                auto curHai = hais[i];
+                auto curHaiSpec = curHai->GetHaiSpec();
+
+                if (curHaiSpec != candidateSpec) continue;
+
+                if (prevHaiSpec == curHaiSpec) continue;
+
+                prevHaiSpec = curHaiSpec;
+
+                auto newBodyCandidate = output->NewBodyCandidate(curBodyCandidate);
+                newBodyCandidate->PushCandidate(curHai);
+                queue.push(std::tuple(newBodyCandidate, i));
+            }
+        }
     }
 }
 
