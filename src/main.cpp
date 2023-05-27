@@ -7,6 +7,8 @@
 #include "ROContainer/ROVector.h"
 #include "ROContainer/ROSet.h"
 #include "CandidateExtractor.h"
+#include <unordered_map>
+#include "FinalFormExtractor.h"
 
 std::vector<int> n()
 {
@@ -21,21 +23,15 @@ int main(int, char**)
 {
     sol::state lua;
     lua.open_libraries(sol::lib::base);
+
     HaiSpec::BindLua(lua);
-    ROVector<int>::BindLua(lua);
 
-    std::unordered_set<int> set;
-    ROSet df(set);
-
-    set.insert(1);
-    set.insert(4);
-    set.insert(3);
-    set.insert(1);
-    set.insert(1);
-
-    lua.set("a", df);
     sol::table res = lua.script_file("./Resource/Lua/test.lua");
 
-    int d = res["res"];
-    std::cout << d << std::endl;
+    sol::table specs = res["a"];
+    for (auto a : specs)
+    {
+        auto df = a.first.as<HaiSpec>();
+        std::cout << df.GetNumber() << std::endl;
+    }
 }

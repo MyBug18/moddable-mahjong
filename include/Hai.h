@@ -50,6 +50,17 @@ public:
     {
         return !(*this < other);
     }
+
+    struct Hash
+    {
+        size_t operator()(const HaiSpec& obj) const
+        {
+            size_t seed = 0;
+            seed ^= std::hash<int>()(obj.haiType) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+            seed ^= std::hash<int>()(obj.number) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+            return seed;
+        }
+    };
 };
 
 class Hai

@@ -19,21 +19,13 @@ BodySpec::BodySpec(const sol::table& table) : name{ table["Name"] }, bodyType{ t
     val = table.get<sol::optional<sol::object>>("GetCandidates");
     if (val)
     {
-        getCandidates = val.value().as<std::function<bool(CandidateExtractor&)>>();
+        getCandidates = val.value().as<std::function<void(FinalFormExtractor&)>>();
         shouldFuro = false;
     }
     else
     {
         shouldFuro = true;
     }
-}
-
-std::vector<Hai*> ReverseCopy(std::vector<Hai*> input)
-{
-    auto output = input;
-    std::reverse(output.begin(), output.end());
-
-    return output;
 }
 
 void BodyCandidate::BindLua(sol::state& lua)

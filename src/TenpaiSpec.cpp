@@ -3,6 +3,7 @@
 #include "CandidateExtractor.h"
 #include <queue>
 #include <tuple>
+#include <coroutine>
 
 BodyCandidate* ShangtenInfo::NewBodyCandidate()
 {
@@ -22,14 +23,6 @@ BodyCandidate* ShangtenInfo::NewBodyCandidate(const BodyCandidate* from)
     return result;
 }
 
-ShangtenInfo::~ShangtenInfo()
-{
-    for (auto& ptr : bodyCandidates)
-    {
-        delete ptr;
-    }
-}
-
 TenpaiSpec::TenpaiSpec(const sol::table& table) : name{ table["Name"] }
 {
     sol::table componentsRaw = table["Properties"];
@@ -40,72 +33,27 @@ TenpaiSpec::TenpaiSpec(const sol::table& table) : name{ table["Name"] }
     }
 }
 
-void GetAllCandidates(const BodySpec& bodySpec, const std::vector<const Hai*>& hais, ShangtenInfo* output)
+struct ShangtenProcessor
 {
-    std::queue<std::tuple<BodyCandidate*, int>> queue;
+    std::unordered_map<std::string, int> compLeftCount;
+};
 
-    for (auto i = 0; i < hais.size(); i++)
-    {
-        auto curHai = hais[i];
-        auto bodyCandidate = output->NewBodyCandidate();
-        bodyCandidate->PushCandidate(curHai);
-        queue.push(std::tuple(bodyCandidate, i));
-    }
+void GetAll(const std::vector<const Hai*>& hais, ShangtenInfoHolder& output)
+{
 
-    while (!queue.empty())
-    {
-        auto cur = queue.front();
-        queue.pop();
-
-        auto curBodyCandidate = std::get<0>(cur);
-        auto index = std::get<1>(cur);
-
-        CandidateExtractor extractor(curBodyCandidate->GetComponentHais());
-
-        auto canProceed = bodySpec.GetCandidates(extractor);
-        if (!canProceed) continue;
-
-        extractor.Sort();
-
-        for (auto& candidateSpec : extractor.GetSpecs())
-        {
-            HaiSpec prevHaiSpec(-1, -1);
-
-            for (int i = index + 1; i < hais.size(); i++)
-            {
-                auto curHai = hais[i];
-                auto curHaiSpec = curHai->GetHaiSpec();
-
-                if (curHaiSpec != candidateSpec) continue;
-
-                if (prevHaiSpec == curHaiSpec) continue;
-
-                prevHaiSpec = curHaiSpec;
-
-                auto newBodyCandidate = output->NewBodyCandidate(curBodyCandidate);
-                newBodyCandidate->PushCandidate(curHai);
-                queue.push(std::tuple(newBodyCandidate, i));
-            }
-        }
-    }
 }
 
-std::unique_ptr<ShangtenInfo> TenpaiSpec::GetShangten(const std::vector<const Hai*>& hais)
+std::unique_ptr<ShangtenInfoHolder> TenpaiSpec::GetShangten(const std::vector<const Hai*>& hais)
 {
     auto& lua = LuaDataHolder::GetInstance();
-    auto result = std::make_unique<ShangtenInfo>();
+    auto result = std::make_unique<ShangtenInfoHolder>();
+    auto holder = result.get();
 
-    for (auto& bodyType : components)
+    for (int i = 0; i < hais.size(); i++)
     {
-        if (!components.contains(bodyType.first)) continue;
-
-        for (auto& bodySpec : lua.GetBodySpecs(bodyType.first))
-        {
-            // bodyspecs: shuntsu, toitsu
-            GetAllCandidates(bodySpec, hais, result.get());
-
-        }
+        auto curHai = hais[i];
     }
+
 
     return result;
 }

@@ -1,12 +1,10 @@
 local m = {}
 
-m.spec1 = HaiSpec.new(1, 3)
-m.spec2 = HaiSpec.new(1, 2)
-m.res = 0
+m.a = {}
 
-for index, value in pairs(a) do
-    m.res = m.res + value
-    value = 2
-end
+
+m.a[HaiSpec.new(0, 0)] = 1
+m.a[HaiSpec.new(0, 1)] = 1
+
 
 return m

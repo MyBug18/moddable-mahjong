@@ -59,7 +59,8 @@
         "fstream": "cpp",
         "iomanip": "cpp",
         "set": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "coroutine": "cpp"
     },
     "C_Cpp.formatting": "vcFormat"
 }

@@ -80,6 +80,16 @@ void LuaDataHolder::LoadBodySpecs()
         });
 }
 
+void LuaDataHolder::LoadTenpaiSpecs()
+{
+    DoFileRecursively("./Resource/Lua/TenpaiSpec", [this](std::string path)
+        {
+            const auto& table = LoadLuaFile(path);
+
+            tenpaiSpecs.emplace_back(table);
+        });
+}
+
 const std::vector<BodySpec>& LuaDataHolder::GetBodySpecs(std::string bodyType) const
 {
     return bodySpecs.at(bodyType);

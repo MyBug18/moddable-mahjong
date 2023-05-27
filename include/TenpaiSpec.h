@@ -10,19 +10,34 @@ class ShangtenInfo final
 private:
     std::vector<const BodyCandidate*> bodyCandidates;
 
-    ShangtenInfo(const ShangtenInfo&) = delete;
-    ShangtenInfo& operator=(const ShangtenInfo&) = delete;
-
 public:
-    ~ShangtenInfo();
-    ShangtenInfo() = default;
-
     BodyCandidate* NewBodyCandidate();
     BodyCandidate* NewBodyCandidate(const BodyCandidate*);
 
     const std::vector<const BodyCandidate*>& GetBodyCandidates() const
     {
         return bodyCandidates;
+    }
+};
+
+class ShangtenInfoHolder final
+{
+private:
+    std::vector<std::unique_ptr<BodyCandidate>> allBodyCandidates;
+
+    std::vector<std::unique_ptr<ShangtenInfo>> shangtenInfos;
+
+    ShangtenInfoHolder(const ShangtenInfoHolder&) = delete;
+    ShangtenInfoHolder& operator=(const ShangtenInfoHolder&) = delete;
+
+public:
+    BodyCandidate* NewBodyCandidate()
+    {
+        auto ptr = std::make_unique<BodyCandidate>();
+        auto result = ptr.get();
+
+        allBodyCandidates.push_back(std::move(ptr));
+        return result;
     }
 };
 
@@ -38,5 +53,5 @@ private:
 public:
     TenpaiSpec(const sol::table&);
 
-    std::unique_ptr<ShangtenInfo> GetShangten(const std::vector<const Hai*>&);
+    std::unique_ptr<ShangtenInfoHolder> GetShangten(const std::vector<const Hai*>&);
 };

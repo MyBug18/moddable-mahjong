@@ -3,16 +3,15 @@
 #include <string>
 #include <unordered_set>
 #include <functional>
-#include "CandidateExtractor.h"
+#include "FinalFormExtractor.h"
 
 class BodyCandidate final
 {
 private:
     std::string formName;
+
     std::vector<const Hai*> componentHais;
     std::unordered_set<const Hai*> candidateHais;
-
-    int count;
 
     ROVector<const Hai*> GetComponentHaisLua()
     {
@@ -69,7 +68,7 @@ private:
 
     bool shouldFuro;
 
-    std::function<bool(CandidateExtractor&)> getCandidates;
+    std::function<void(FinalFormExtractor&)> getCandidates;
 
     int completeCount;
 
@@ -86,9 +85,9 @@ public:
         return bodyType;
     }
 
-    bool GetCandidates(CandidateExtractor& extractor) const
+    void GetCandidates(FinalFormExtractor& extractor) const
     {
-        return getCandidates(extractor);
+        getCandidates(extractor);
     }
 };
 
@@ -105,5 +104,8 @@ public:
 
     }
 
-    const BodySpec& GetBodySpec() const;
+    const BodySpec& GetBodySpec() const
+    {
+        return bodySpec;
+    }
 };
