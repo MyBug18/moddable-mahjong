@@ -31,6 +31,8 @@ private:
     ShangtenInfoHolder& operator=(const ShangtenInfoHolder&) = delete;
 
 public:
+    ShangtenInfoHolder() = default;
+
     BodyCandidate* NewBodyCandidate()
     {
         auto ptr = std::make_unique<BodyCandidate>();
@@ -52,6 +54,7 @@ private:
 
 public:
     TenpaiSpec(const sol::table&);
+    TenpaiSpec(TenpaiSpec&&) = default;
 
     std::unique_ptr<ShangtenInfoHolder> GetShangten(const std::vector<const Hai*>&);
 };

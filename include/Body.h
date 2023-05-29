@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_set>
 #include <functional>
+#include "ROContainer/ROVector.h"
 #include "FinalFormExtractor.h"
 
 class BodyCandidate final
