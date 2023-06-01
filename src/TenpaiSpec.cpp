@@ -1,8 +1,8 @@
 #include "TenpaiSpec.h"
 #include "LuaDataHolder.h"
 #include "CandidateExtractor.h"
+#include "Enumerator.h"
 #include <queue>
-#include <coroutine>
 
 BodyCandidate* ShangtenInfo::NewBodyCandidate()
 {
@@ -32,65 +32,6 @@ TenpaiSpec::TenpaiSpec(const sol::table& table) : name{ table["Name"] }
     }
 }
 
-struct CombinationGenerator
-{
-    struct promise_type
-    {
-        std::vector<HaiSpec> currentCombination;
-
-        auto get_return_object()
-        {
-            return CombinationGenerator{ std::coroutine_handle<promise_type>::from_promise(*this) };
-        }
-
-        auto initial_suspend() noexcept
-        {
-            return std::suspend_always{};
-        }
-
-        auto final_suspend() noexcept
-        {
-            return std::suspend_always{};
-        }
-
-        void return_void() noexcept {}
-
-        auto yield_value(std::vector<HaiSpec> combination) noexcept
-        {
-            currentCombination = std::move(combination);
-            return std::suspend_always{};
-        }
-
-        void unhandled_exception()
-        {
-            std::terminate();
-        }
-    };
-
-    std::coroutine_handle<promise_type> coro_handle;
-
-    explicit CombinationGenerator(std::coroutine_handle<promise_type> handle) : coro_handle(handle) {}
-
-    ~CombinationGenerator()
-    {
-        if (coro_handle)
-        {
-            coro_handle.destroy();
-        }
-    }
-
-    bool move_next()
-    {
-        coro_handle.resume();
-        return !coro_handle.done();
-    }
-
-    const std::vector<HaiSpec>& current_combination() const
-    {
-        return coro_handle.promise().currentCombination;
-    }
-};
-
 struct CombHelper
 {
     // nth element is removed from combination if the value is false.
@@ -99,7 +40,7 @@ struct CombHelper
     int loopStartIndex;
 };
 
-CombinationGenerator GetAllCombination(HaiSpec base, const std::unordered_map<HaiSpec, int, HaiSpec::Hash>& bodyHaiSpecMap)
+Enumerator<std::vector<HaiSpec>> GetAllCombination(HaiSpec base, const std::unordered_map<HaiSpec, int, HaiSpec::Hash>& bodyHaiSpecMap)
 {
     std::queue<CombHelper> queue;
     std::vector<HaiSpec> hais;
@@ -161,7 +102,7 @@ CombinationGenerator GetAllCombination(HaiSpec base, const std::unordered_map<Ha
 
 struct ShangtenProcessor
 {
-    CombinationGenerator* generator;
+    Enumerator<std::vector<HaiSpec>>* generator;
     std::unordered_map<std::string, int> componentLeftCount;
 };
 
