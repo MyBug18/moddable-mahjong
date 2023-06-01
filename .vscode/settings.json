@@ -60,7 +60,12 @@
         "iomanip": "cpp",
         "set": "cpp",
         "list": "cpp",
-        "coroutine": "cpp"
+        "coroutine": "cpp",
+        "complex": "cpp",
+        "map": "cpp",
+        "semaphore": "cpp",
+        "stop_token": "cpp",
+        "thread": "cpp"
     },
     "C_Cpp.formatting": "vcFormat"
 }

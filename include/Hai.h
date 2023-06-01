@@ -16,6 +16,8 @@ public:
     int GetNumber() const;
     int GetHaiType() const;
 
+    std::string ToString() const;
+
     bool operator<(const HaiSpec& other) const
     {
         if (haiType == other.haiType)

@@ -1,5 +1,5 @@
 #include "Hai.h"
-#include <iostream>
+#include "fmt/core.h"
 
 HaiSpec::HaiSpec(int haiType, int number) : haiType(haiType), number(number)
 {
@@ -20,6 +20,11 @@ int HaiSpec::GetNumber() const
 int HaiSpec::GetHaiType() const
 {
     return haiType;
+}
+
+std::string HaiSpec::ToString() const
+{
+    return fmt::format("HaiSpec({}, {})", haiType, number);
 }
 
 void Hai::BindLua(sol::state& lua)

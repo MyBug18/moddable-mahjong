@@ -18,6 +18,9 @@ public:
     {
         return bodyCandidates;
     }
+
+    std::vector<std::vector<HaiSpec>> Test(HaiSpec base,
+        const std::unordered_map<HaiSpec, int, HaiSpec::Hash>& bodyHaiSpecMap);
 };
 
 class ShangtenInfoHolder final
