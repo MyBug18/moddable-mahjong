@@ -94,8 +94,8 @@ struct CombinationGenerator
 struct CombHelper
 {
     // nth element is removed from combination if the value is false.
-
     std::vector<bool> remains;
+
     int loopStartIndex;
 };
 
@@ -129,7 +129,6 @@ CombinationGenerator GetAllCombination(HaiSpec base, const std::unordered_map<Ha
     while (!queue.empty())
     {
         auto cur = queue.front();
-
         queue.pop();
 
         std::vector<HaiSpec> result;
@@ -164,7 +163,6 @@ struct ShangtenProcessor
 {
     CombinationGenerator* generator;
     std::unordered_map<std::string, int> componentLeftCount;
-
 };
 
 std::unique_ptr<ShangtenInfoHolder> TenpaiSpec::GetShangten(const std::vector<const Hai*>& hais)
@@ -188,27 +186,6 @@ std::unique_ptr<ShangtenInfoHolder> TenpaiSpec::GetShangten(const std::vector<co
         {
             haiSpecMap[s] = 1;
         }
-    }
-
-    return result;
-}
-
-
-std::vector<std::vector<HaiSpec>> ShangtenInfo::Test(HaiSpec base,
-    const std::unordered_map<HaiSpec, int, HaiSpec::Hash>& bodyHaiSpecMap)
-{
-    std::vector<std::vector<HaiSpec>> result;
-
-    auto gen = GetAllCombination(base, bodyHaiSpecMap);
-
-    while (!gen.move_next())
-    {
-        for (auto h : gen.current_combination())
-        {
-            std::cout << h.ToString() << " ";
-        }
-
-        std::cout << std::endl;
     }
 
     return result;

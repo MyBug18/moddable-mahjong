@@ -4,6 +4,7 @@
 #include <iostream>
 #include "LuaDataHolder.h"
 #include "Body.h"
+#include "TenpaiSpec.h"
 #include "ROContainer/ROVector.h"
 #include "ROContainer/ROSet.h"
 #include "CandidateExtractor.h"
