@@ -27,12 +27,3 @@ BodySpec::BodySpec(const sol::table& table) : name{ table["Name"] }, bodyType{ t
         shouldFuro = true;
     }
 }
-
-void BodyCandidate::BindLua(sol::state& lua)
-{
-    auto haiType = lua.new_usertype<BodyCandidate>("BodyCandidate");
-
-    haiType["Name"] = sol::property(&BodyCandidate::GetName, &BodyCandidate::SetName);
-    haiType["ComponentHais"] = sol::property(&BodyCandidate::GetComponentHaisLua);
-    haiType["PushCandidate"] = &BodyCandidate::PushCandidate;
-}

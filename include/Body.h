@@ -3,21 +3,13 @@
 #include <string>
 #include <unordered_set>
 #include <functional>
-#include "ROContainer/ROVector.h"
 #include "FinalFormExtractor.h"
 
 class BodyCandidate final
 {
 private:
-    std::string formName;
-
-    std::vector<const Hai*> componentHais;
-    std::unordered_set<const Hai*> candidateHais;
-
-    ROVector<const Hai*> GetComponentHaisLua()
-    {
-        return ROVector<const Hai*>(componentHais);
-    }
+    std::vector<HaiSpec> componentHais;
+    std::vector<HaiSpec> candidateHais;
 
 public:
     BodyCandidate() = default;
@@ -28,31 +20,19 @@ public:
         this->componentHais = obj.componentHais;
     }
 
-    static void BindLua(sol::state&);
-
-    void PushCandidate(const Hai* h)
+    void PushCandidate(HaiSpec h)
     {
-        candidateHais.insert(h);
+        candidateHais.push_back(h);
     }
 
-    const std::vector<const Hai*>& GetComponentHais() const
+    const std::vector<HaiSpec>& GetComponentHais() const
     {
         return componentHais;
     }
 
-    const std::unordered_set<const Hai*>& GetCandidateHais() const
+    const std::vector<HaiSpec>& GetCandidateHais() const
     {
         return candidateHais;
-    }
-
-    const std::string& GetName() const
-    {
-        return formName;
-    }
-
-    void SetName(std::string name)
-    {
-        formName = name;
     }
 };
 
@@ -89,6 +69,11 @@ public:
     void GetCandidates(FinalFormExtractor& extractor) const
     {
         getCandidates(extractor);
+    }
+
+    int GetCompleteCount() const
+    {
+        return completeCount;
     }
 };
 

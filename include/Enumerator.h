@@ -26,9 +26,9 @@ struct Enumerator
 
         void return_void() noexcept {}
 
-        auto yield_value(T combination) noexcept
+        auto yield_value(T v) noexcept
         {
-            current = std::move(combination);
+            current = std::move(v);
             return std::suspend_always{};
         }
 

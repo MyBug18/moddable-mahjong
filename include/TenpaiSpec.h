@@ -52,6 +52,8 @@ private:
     TenpaiSpec(const TenpaiSpec&) = delete;
     TenpaiSpec& operator=(const TenpaiSpec&) = delete;
 
+    int maxSameHai = 4;
+
 public:
     TenpaiSpec(const sol::table&);
     TenpaiSpec(TenpaiSpec&&) = default;

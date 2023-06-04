@@ -3,6 +3,7 @@
 #include "CandidateExtractor.h"
 #include "Enumerator.h"
 #include <queue>
+#include <stack>
 
 BodyCandidate* ShangtenInfo::NewBodyCandidate()
 {
@@ -100,9 +101,85 @@ Enumerator<std::vector<HaiSpec>> GetAllCombination(HaiSpec base, const std::unor
     }
 }
 
+struct CandidateHolder
+{
+    BodySpec* bodySpec;
+
+    Enumerator<std::vector<HaiSpec>>* enumerator;
+};
+
+struct CandidateHolderComparator
+{
+    bool operator()(CandidateHolder* a, CandidateHolder* b)
+    {
+        auto& vec1 = a->enumerator->current();
+        auto& vec2 = b->enumerator->current();
+
+        auto l1 = vec1.size();
+        auto l2 = vec2.size();
+
+        auto to1 = l1 - a->bodySpec->GetCompleteCount();
+        auto to2 = l2 - b->bodySpec->GetCompleteCount();
+
+        if (to1 == to2)
+        {
+            return l1 < l2;
+        }
+
+        return to1 < to2;
+    }
+};
+
+class CombinationMerger
+{
+private:
+    std::priority_queue<CandidateHolder*, std::vector<CandidateHolder*>, CandidateHolderComparator> holders;
+    CandidateHolder* currentHolder;
+
+public:
+    void PushHolder(CandidateHolder* holder)
+    {
+        if (!holder->enumerator->move_next()) return;
+
+        holders.push(holder);
+        currentHolder = holders.top();
+    }
+
+    CandidateHolder* Current() const
+    {
+        return currentHolder;
+    }
+
+    bool MoveNext()
+    {
+        if (holders.size() == 0)
+        {
+            return false;
+        }
+
+        auto* cur = holders.top();
+        holders.pop();
+
+        if (cur->enumerator->move_next())
+        {
+            holders.push(cur);
+        }
+
+        currentHolder = holders.top();
+        return true;
+    }
+};
+
 struct ShangtenProcessor
 {
-    Enumerator<std::vector<HaiSpec>>* generator;
+    CombinationMerger* enumerator;
+
+    int loopStartIndex;
+
+    BodySpec* bodySpec;
+
+    std::vector<std::vector<HaiSpec>> bodies;
+
     std::unordered_map<std::string, int> componentLeftCount;
 };
 
@@ -112,21 +189,14 @@ std::unique_ptr<ShangtenInfoHolder> TenpaiSpec::GetShangten(const std::vector<co
     auto result = std::make_unique<ShangtenInfoHolder>();
     auto holder = result.get();
 
-    // init map
-    std::unordered_map<HaiSpec, int, HaiSpec::Hash> haiSpecMap;
+    std::stack<std::unique_ptr<ShangtenProcessor>> stack;
 
-    for (auto h : hais)
+    while (!stack.empty())
     {
-        auto s = h->GetHaiSpec();
+        auto lastProcessor = stack.top().get();
 
-        if (haiSpecMap.contains(s))
-        {
-            haiSpecMap[s]++;
-        }
-        else
-        {
-            haiSpecMap[s] = 1;
-        }
+
+
     }
 
     return result;

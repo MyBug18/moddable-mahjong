@@ -42,7 +42,6 @@ sol::table LuaDataHolder::LoadLuaFile(const std::string& dir)
 void LuaDataHolder::BindLua()
 {
     HaiSpec::BindLua(lua);
-    BodyCandidate::BindLua(lua);
     Hai::BindLua(lua);
 
     BindROContainers(lua);
