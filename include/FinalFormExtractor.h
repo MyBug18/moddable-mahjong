@@ -38,9 +38,17 @@ public:
 
     }
 
-    const std::vector<std::unordered_map<HaiSpec, int, HaiSpec::Hash>>& GetFinalForms()
+    std::vector<std::unordered_map<HaiSpec, int, HaiSpec::Hash>> GetFinalForms(std::unordered_map<HaiSpec, int, HaiSpec::Hash> haiCounts)
     {
-        return finalForms;
+        std::vector<std::unordered_map<HaiSpec, int, HaiSpec::Hash>> result;
+
+        for (auto& finalForm : finalForms)
+        {
+            for (auto& haiCountKv : haiCounts)
+            {
+
+            }
+        }
     }
 
     HaiSpec GetHaiSpec()

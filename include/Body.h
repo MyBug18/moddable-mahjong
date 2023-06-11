@@ -8,8 +8,10 @@
 class BodyCandidate final
 {
 private:
-    std::vector<HaiSpec> componentHais;
-    std::vector<HaiSpec> candidateHais;
+    std::unordered_map<HaiSpec, int, HaiSpec::Hash> componentHais;
+    std::unordered_map<HaiSpec, int, HaiSpec::Hash> candidateHais;
+
+    BodySpec* bodySpec;
 
 public:
     BodyCandidate() = default;
@@ -20,17 +22,12 @@ public:
         this->componentHais = obj.componentHais;
     }
 
-    void PushCandidate(HaiSpec h)
-    {
-        candidateHais.push_back(h);
-    }
-
-    const std::vector<HaiSpec>& GetComponentHais() const
+    std::unordered_map<HaiSpec, int, HaiSpec::Hash>& GetComponentHais()
     {
         return componentHais;
     }
 
-    const std::vector<HaiSpec>& GetCandidateHais() const
+    std::unordered_map<HaiSpec, int, HaiSpec::Hash>& GetCandidateHais()
     {
         return candidateHais;
     }

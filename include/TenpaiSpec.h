@@ -32,15 +32,6 @@ private:
 
 public:
     ShangtenInfoHolder() = default;
-
-    BodyCandidate* NewBodyCandidate()
-    {
-        auto ptr = std::make_unique<BodyCandidate>();
-        auto result = ptr.get();
-
-        allBodyCandidates.push_back(std::move(ptr));
-        return result;
-    }
 };
 
 class TenpaiSpec final
