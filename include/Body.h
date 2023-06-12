@@ -5,34 +5,6 @@
 #include <functional>
 #include "FinalFormExtractor.h"
 
-class BodyCandidate final
-{
-private:
-    std::unordered_map<HaiSpec, int, HaiSpec::Hash> componentHais;
-    std::unordered_map<HaiSpec, int, HaiSpec::Hash> candidateHais;
-
-    BodySpec* bodySpec;
-
-public:
-    BodyCandidate() = default;
-
-    BodyCandidate(const BodyCandidate& obj)
-    {
-        // only copy existing components
-        this->componentHais = obj.componentHais;
-    }
-
-    std::unordered_map<HaiSpec, int, HaiSpec::Hash>& GetComponentHais()
-    {
-        return componentHais;
-    }
-
-    std::unordered_map<HaiSpec, int, HaiSpec::Hash>& GetCandidateHais()
-    {
-        return candidateHais;
-    }
-};
-
 class BodySpec final
 {
 private:
@@ -71,6 +43,34 @@ public:
     int GetCompleteCount() const
     {
         return completeCount;
+    }
+};
+
+class BodyCandidate final
+{
+private:
+    std::unordered_map<HaiSpec, int, HaiSpec::Hash> componentHais;
+    std::unordered_map<HaiSpec, int, HaiSpec::Hash> candidateHais;
+
+    BodySpec* bodySpec;
+
+public:
+    BodyCandidate() = default;
+
+    BodyCandidate(const BodyCandidate& obj)
+    {
+        // only copy existing components
+        this->componentHais = obj.componentHais;
+    }
+
+    std::unordered_map<HaiSpec, int, HaiSpec::Hash>& GetComponentHais()
+    {
+        return componentHais;
+    }
+
+    std::unordered_map<HaiSpec, int, HaiSpec::Hash>& GetCandidateHais()
+    {
+        return candidateHais;
     }
 };
 

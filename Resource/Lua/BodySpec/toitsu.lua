@@ -6,28 +6,13 @@ m.Properties = { 'toitsu' }
 
 m.CompleteCount = 2
 m.GetCandidates = function(extractor)
-    local hais = extractor.Hais;
-
-    local l = #hais
-
-    if (l >= 2) then
-        extractor:SetName('toitsu_complete')
-        return false
-    end
-
-    if l == 0 then
-        return false
-    end
-
-    local hai = hais.at(0)
-    local haiSpec = hai.HaiSpec
+    local haiSpec = extractor.HaiSpec
+    local type = haiSpec.HaiType
     local number = haiSpec.Number
-    local haiType = haiSpec.HaiType
 
-    extractor:PushHai(HaiSpec.new(haiType, number))
-    extractor:SetName('tanki')
-
-    return true
+    local form = {}
+    form[HaiSpec.new(type, number)] = 1
+    extractor:PushForm(form)
 end
 
 return m

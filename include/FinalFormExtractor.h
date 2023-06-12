@@ -21,6 +21,8 @@ private:
             form[kv.first.as<HaiSpec>()] = kv.second.as<int>();
         }
 
+        form[initialHaiSpec]++;
+
         finalForms.push_back(std::move(form));
     }
 
@@ -49,6 +51,8 @@ public:
 
             }
         }
+
+        return result;
     }
 
     HaiSpec GetHaiSpec()

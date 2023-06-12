@@ -4,6 +4,7 @@ m.Name = 'shuntsu'
 m.BodyType = 'triplet'
 m.Properties = { 'shuntsu' }
 
+m.CompleteCount = 3
 m.GetCandidates = function(extractor)
     local haiSpec = extractor.HaiSpec
     local type = haiSpec.HaiType
@@ -16,7 +17,9 @@ m.GetCandidates = function(extractor)
         local to = math.min(number + 2, 9)
 
         for j in i, to do
-            form[HaiSpec.new(type, i)] = 1
+            if i ~= number then
+                form[HaiSpec.new(type, i)] = 1
+            end
         end
 
         extractor:PushForm(form)
